@@ -132,7 +132,7 @@
     </style>
 </head>
 <body>
-   <div id="header">
+    <div id="header">
         <a href="https://ibb.co/qDwzFRt">
             <img id="logo" src="https://i.ibb.co/yNJDB8w/roombloom-high-resolution-logo-color-on-transparent-background-2.png" alt="RoomBloom Logo" border="0">
         </a>
@@ -180,6 +180,13 @@
             "#610404": "https://i.ibb.co/3Tm0Wr7/Fortune.png", // Fortune
             "#da064a": "https://i.ibb.co/3hRwMtc/Full-Monty.png", // Full Monty
             "#c31627": "https://i.ibb.co/B6nPcGd/Explorer.png" // Explorer
+        };
+
+        const stockAvailability = {
+            "#e180a8": 10,   // Deep Purple - 10 in stock
+            "#610404": 0,    // Fortune - 5 in stock
+            "#da064a": 10,    // Full Monty - Out of stock
+            "#c31627": 7     // Explorer - 7 in stock
         };
 
         document.getElementById("image-input").addEventListener("change", function () {
@@ -236,24 +243,30 @@
                                 complementaryColorBoxContainer.appendChild(complementaryColorHex);
                                 complementaryColorBoxes.appendChild(complementaryColorBoxContainer);
 
+                                // Calculate matching rose colors based on stock availability
                                 const matchingRoseColors = findMatchingRoseColors(complementaryColor);
+
+                                // Filter out any roses that are out of stock
+                                const inStockMatchingRoseColors = matchingRoseColors.filter(color => stockAvailability[color] > 0);
+
+                                // Update the displayed rose images
                                 roseColorBoxes.innerHTML = "";
 
-                                if (matchingRoseColors.length > 0) {
-                                    for (let i = 0; i < matchingRoseColors.length; i++) {
+                                if (inStockMatchingRoseColors.length > 0) {
+                                    for (let i = 0; i < inStockMatchingRoseColors.length; i++) {
                                         const matchingRoseColorBoxContainer = document.createElement("div");
                                         matchingRoseColorBoxContainer.className = "rose-color-box-container";
                                         const matchingRoseColorBox = document.createElement("div");
                                         matchingRoseColorBox.className = "rose-color-box";
-                                        matchingRoseColorBox.style.backgroundColor = matchingRoseColors[i];
+                                        matchingRoseColorBox.style.backgroundColor = inStockMatchingRoseColors[i];
                                         const matchingRoseColorHex = document.createElement("span");
-                                        matchingRoseColorHex.innerText = matchingRoseColors[i];
+                                        matchingRoseColorHex.innerText = inStockMatchingRoseColors[i];
                                         matchingRoseColorBoxContainer.appendChild(matchingRoseColorBox);
                                         matchingRoseColorBoxContainer.appendChild(matchingRoseColorHex);
                                         roseColorBoxes.appendChild(matchingRoseColorBoxContainer);
 
-                                        if (i < 3 && roseImages[matchingRoseColors[i]]) {
-                                            document.getElementById(`rose-image-${i + 1}`).src = roseImages[matchingRoseColors[i]];
+                                        if (i < 3 && roseImages[inStockMatchingRoseColors[i]]) {
+                                            document.getElementById(`rose-image-${i + 1}`).src = roseImages[inStockMatchingRoseColors[i]];
                                             document.getElementById(`rose-image-${i + 1}`).style.display = "block";
                                         }
                                     }
