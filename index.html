@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Visualizer</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F6CEA8;
+            margin: 0;
+            padding: 0;
+            color: #475544;
+        }
+
+        #header {
+            background-color: #F6CEA8;
+            color: #475544;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #logo {
+            width: 315px;
+            height: 150px;
+        }
+
+        #container {
+            text-align: center;
+            margin: 20px;
+        }
+
+        #image-container {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        .color-box-container {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .color-box {
+            font-family: 'Poppins', sans-serif;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #F6CEA8;
+            margin-right: 10px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .color-box span {
+            color: #475544;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .complementary-color-box-container {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .complementary-color-box {
+            font-family: 'Poppins', sans-serif;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #F6CEA8;
+            margin-right: 10px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .complementary-color-box span {
+            color: #475544;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+            display: block;
+        }
+
+        .rose-color-box {
+            font-family: 'Poppins', sans-serif;
+            width: 100px;
+            height: 100px;
+            border: 2px solid #F6CEA8;
+            margin-right: 10px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .rose-color-box span {
+            color: #475544;
+            text-align: center;
+            margin-top: 5px;
+            font-weight: bold;
+            display: block;
+        }
+
+        #image-input {
+            display: none;
+        }
+
+        #upload-button {
+            background-color: #475544;
+            color: #F6CEA8;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        #upload-button:hover {
+            background-color: #354432;
+        }
+
+        #rose-image-container {
+            text-align: center;
+        }
+
+        #rose-image-centering {
+            display: flex;
+            justify-content: center;
+        }
+
+        #rose-image {
+            width: 100px; /* Adjust the size as needed */
+            height: 100px; /* Adjust the size as needed */
+            display: none;
+        }
+    </style>
+</head>
+<body>
+   <div id="header">
+        <a href="https://ibb.co/qDwzFRt">
+            <img id="logo" src="https://i.ibb.co/yNJDB8w/roombloom-high-resolution-logo-color-on-transparent-background-2.png" alt="RoomBloom Logo" border="0">
+        </a>
+    </div>
+
+    <div id="container">
+        <form>
+            <label for="image-input" id="upload-button">Upload an Image</label>
+            <input type="file" id="image-input" accept="image/*">
+        </form>
+
+        <div id="image-container">
+            <h2>Uploaded Image</h2>
+            <img id="uploaded-image" src="" alt="Uploaded Image" width="200">
+        </div>
+
+        <div id="color-container">
+            <h2>Top 5 Dominant Colors</h2>
+            <div class="color-box-container" id="color-boxes"></div>
+        </div>
+
+        <div id="complementary-color-container">
+            <h2>Complementary Color Combinations</h2>
+            <div class="complementary-color-box-container" id="complementary-color-boxes"></div>
+        </div>
+
+        <div id="rose-color-container">
+            <h2>Matching Rose Colors</h2>
+            <div class="rose-color-box-container" id="rose-color-boxes"></div>
+        </div>
+    </div>
+
+    <div class="rose-images" id="rose-images">
+        <img id="rose-image-1" class="rose-image" src="" alt="Matching Rose 1">
+        <img id="rose-image-2" class="rose-image" src="" alt="Matching Rose 2">
+        <img id="rose-image-3" class="rose-image" src="" alt="Matching Rose 3">
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vibrant.js/1.0.0/Vibrant.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"></script>
+
+    <script>
+        const roseImages = {
+            "#e180a8": "https://i.ibb.co/MSXDfzS/Deep-Purple.png", // Deep Purple
+            "#610404": "https://i.ibb.co/3Tm0Wr7/Fortune.png", // Fortune
+            "#da064a": "https://i.ibb.co/3hRwMtc/Full-Monty.png", // Full Monty
+            "#c31627": "https://i.ibb.co/B6nPcGd/Explorer.png" // Explorer
+        };
+
+        document.getElementById("image-input").addEventListener("change", function () {
+            const fileInput = document.getElementById("image-input");
+            const uploadedImage = document.getElementById("uploaded-image");
+            const colorBoxes = document.getElementById("color-boxes");
+            const complementaryColorBoxes = document.getElementById("complementary-color-boxes");
+            const roseColorBoxes = document.getElementById("rose-color-boxes");
+            const roseImagesDiv = document.getElementById("rose-images");
+
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    uploadedImage.src = e.target.result;
+
+                    const img = new Image();
+                    img.src = e.target.result;
+
+                    img.onload = function () {
+                        const vibrant = new Vibrant(img);
+                        const swatches = vibrant.swatches();
+
+                        const topColors = Object.values(swatches).slice(0, 5);
+
+                        colorBoxes.innerHTML = "";
+                        complementaryColorBoxes.innerHTML = "";
+                        roseColorBoxes.innerHTML = "";
+                        roseImagesDiv.style.display = "none";
+
+                        for (const color of topColors) {
+                            if (color) {
+                                const colorBoxContainer = document.createElement("div");
+                                colorBoxContainer.className = "color-box-container";
+                                const colorBox = document.createElement("div");
+                                colorBox.className = "color-box";
+                                colorBox.style.backgroundColor = color.getHex();
+                                const colorHex = document.createElement("span");
+                                colorHex.innerText = color.getHex();
+                                colorBoxContainer.appendChild(colorBox);
+                                colorBoxContainer.appendChild(colorHex);
+                                colorBoxes.appendChild(colorBoxContainer);
+
+                                const complementaryColor = calculateComplementaryColor(color.getHex());
+                                const complementaryColorBoxContainer = document.createElement("div");
+                                complementaryColorBoxContainer.className = "complementary-color-box-container";
+                                const complementaryColorBox = document.createElement("div");
+                                complementaryColorBox.className = "complementary-color-box";
+                                complementaryColorBox.style.backgroundColor = complementaryColor;
+                                const complementaryColorHex = document.createElement("span");
+                                complementaryColorHex.innerText = complementaryColor;
+                                complementaryColorBoxContainer.appendChild(complementaryColorBox);
+                                complementaryColorBoxContainer.appendChild(complementaryColorHex);
+                                complementaryColorBoxes.appendChild(complementaryColorBoxContainer);
+
+                                const matchingRoseColors = findMatchingRoseColors(complementaryColor);
+                                roseColorBoxes.innerHTML = "";
+
+                                if (matchingRoseColors.length > 0) {
+                                    for (let i = 0; i < matchingRoseColors.length; i++) {
+                                        const matchingRoseColorBoxContainer = document.createElement("div");
+                                        matchingRoseColorBoxContainer.className = "rose-color-box-container";
+                                        const matchingRoseColorBox = document.createElement("div");
+                                        matchingRoseColorBox.className = "rose-color-box";
+                                        matchingRoseColorBox.style.backgroundColor = matchingRoseColors[i];
+                                        const matchingRoseColorHex = document.createElement("span");
+                                        matchingRoseColorHex.innerText = matchingRoseColors[i];
+                                        matchingRoseColorBoxContainer.appendChild(matchingRoseColorBox);
+                                        matchingRoseColorBoxContainer.appendChild(matchingRoseColorHex);
+                                        roseColorBoxes.appendChild(matchingRoseColorBoxContainer);
+
+                                        if (i < 3 && roseImages[matchingRoseColors[i]]) {
+                                            document.getElementById(`rose-image-${i + 1}`).src = roseImages[matchingRoseColors[i]];
+                                            document.getElementById(`rose-image-${i + 1}`).style.display = "block";
+                                        }
+                                    }
+                                    roseImagesDiv.style.display = "block";
+                                }
+                            }
+                        }
+                    };
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function calculateComplementaryColor(hexColor) {
+            const rgbColor = chroma(hexColor).rgb();
+            const r = 255 - rgbColor[0];
+            const g = 255 - rgbColor[1];
+            const b = 255 - rgbColor[2];
+            return chroma(r, g, b).hex();
+        }
+
+        function findMatchingRoseColors(complementaryColor) {
+            const roseColors = Object.keys(roseImages);
+            const differences = roseColors.map((roseColor) => chroma.deltaE(complementaryColor, roseColor));
+            const sortedRoseColors = roseColors.slice().sort((a, b) => {
+                const indexA = roseColors.indexOf(a);
+                const indexB = roseColors.indexOf(b);
+                return differences[indexA] - differences[indexB];
+            });
+
+            return sortedRoseColors.slice(0, 3);
+        }
+    </script>
+</body>
+</html>
