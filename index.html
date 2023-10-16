@@ -119,15 +119,15 @@
             text-align: center;
         }
 
-        #rose-image-centering {
-            display: flex;
-            justify-content: center;
+        #rose-images {
+            text-align: center;
         }
 
-        #rose-image {
-            width: 100px; /* Adjust the size as needed */
-            height: 100px; /* Adjust the size as needed */
-            display: none;
+        .rose-image {
+            width: 450px; /* Adjust the size as needed */
+            height: 450px; /* Adjust the size as needed */
+            display: inline-block;
+    margin: 0 auto; /* This will center the images horizontally */
         }
     </style>
 </head>
@@ -166,27 +166,65 @@
     </div>
 
     <div class="rose-images" id="rose-images">
-        <img id="rose-image-1" class="rose-image" src="" alt="Matching Rose 1">
-        <img id="rose-image-2" class="rose-image" src="" alt="Matching Rose 2">
-        <img id="rose-image-3" class="rose-image" src="" alt="Matching Rose 3">
-    </div>
+    <img id="rose-image-1" class="rose-image" src="" alt="Matching Rose 1">
+    <img id="rose-image-2" class="rose-image" src="" alt="Matching Rose 2">
+    <img id="rose-image-3" class="rose-image" src="" alt="Matching Rose 3">
+</div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vibrant.js/1.0.0/Vibrant.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.1.0/chroma.min.js"></script>
 
     <script>
+        const stockAvailability = {
+            "#e180a8": 3,
+            "#610404": 3,
+            "#da064a": 5,
+            "#c31627": 2,
+            "#a61978": 3,
+            "#b7bcbd": 1,
+            "#bc5326": 4,
+            "#f19891": 2,
+            "#97909a": 3,
+            "#d3c8bf": 3,
+            "#d7bba4": 1,
+            "#d46097": 5,
+            "#bb2324": 3,
+            "#d7cca3": 4,
+            "#d2638a": 3,
+            "#8e3d24": 2,
+            "#ba3325": 3,
+            "#dadfb5": 5,
+            "#ed9351": 3,
+            "#b76591": 4,
+            "#811a32": 3,
+            "#e19c9f": 1,
+            "#e55f6d": 3
+        };
+
         const roseImages = {
             "#e180a8": "https://i.ibb.co/MSXDfzS/Deep-Purple.png", // Deep Purple
             "#610404": "https://i.ibb.co/3Tm0Wr7/Fortune.png", // Fortune
             "#da064a": "https://i.ibb.co/3hRwMtc/Full-Monty.png", // Full Monty
-            "#c31627": "https://i.ibb.co/B6nPcGd/Explorer.png" // Explorer
-        };
-
-        const stockAvailability = {
-            "#e180a8": 0,   // Deep Purple - 10 in stock
-            "#610404": 10,    // Fortune - 5 in stock
-            "#da064a": 10,    // Full Monty - Out of stock
-            "#c31627": 10,     // Explorer - 7 in stock
+            "#c31627": "https://i.ibb.co/B6nPcGd/Explorer.png", // Explorer
+            "#a61978": "https://i.ibb.co/R0H0xw7/TOPAZ.png", // Topaz
+            "#b7bcbd": "https://i.ibb.co/bFPbhcX/Tibet.png", // Tibet
+            "#bc5326": "https://i.ibb.co/KbmjrvL/Shimmer.png", // Shimmer
+            "#f19891": "https://i.ibb.co/wBqRQs2/Rhoslyn.png", // Rhoslyn
+            "#97909a": "https://i.ibb.co/tYHzdgc/QUICK.png", // Quicksand
+            "#d3c8bf": "https://i.ibb.co/Jr6ZvCM/Playa-Blanca.png", // Playa
+            "#d7bba4": "https://i.ibb.co/Rz4d9wK/Pink-Mondial.png", // PinkM
+            "#d46097": "https://i.ibb.co/n0Jw8Rw/Pink-Floyd.png", // Pink Floyd
+            "#bb2324": "https://i.ibb.co/g3553MB/Nina.png", // Nina
+            "#d7cca3": "https://i.ibb.co/zGNhgRS/Mondial.png", // Mondial
+            "#d2638a": "https://i.ibb.co/0VVq2fH/MANDALA.png", // Mandala
+            "#8e3d24": "https://i.ibb.co/kqvG4zf/Kahala.png", // Kahala
+            "#ba3325": "https://i.ibb.co/qncdxML/High-and-Magic.png", // HighM
+            "#dadfb5": "https://i.ibb.co/BNSYgfW/Frutteto.png", // Frutteto
+            "#ed9351": "https://i.ibb.co/gTkD2y7/Free-Spirit.png", // Free Spirit
+            "#b76591": "https://i.ibb.co/L1qk6mb/Esperance.png", // Esperance
+            "#811a32": "https://i.ibb.co/yYnWgmT/Country-Blues.png", // Country
+            "#e19c9f": "https://i.ibb.co/FVT6x6D/BE-SWEET-2.png", // Be Sweet
+            "#e55f6d": "https://i.ibb.co/W26hzYP/CANDY-1.png" // Candy
         };
 
         document.getElementById("image-input").addEventListener("change", function () {
@@ -300,6 +338,9 @@
 
             return sortedRoseColors.slice(0, 3);
         }
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
